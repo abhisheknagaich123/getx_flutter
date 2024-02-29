@@ -6,4 +6,5 @@ A new Flutter project.
 
 This project is a starting point for a Flutter application.
 #sncakbar by getx
-![Uploading Screenshot (35).png…]()
+
+![Screenshot (35)](https://github.com/abhisheknagaich123/getx_flutter/assets/77282305/20e16489-590e-47a1-96d8-8fc146a04ed8)
