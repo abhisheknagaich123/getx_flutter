@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:getx_flutter/login%20Api/home.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -10,6 +14,7 @@ class LoginController extends GetxController {
   final password = TextEditingController().obs;
   final confirm_password = TextEditingController().obs;
   RxBool eye = true.obs;
+  final db = FirebaseFirestore.instance;
 
   passwordobsucure() {
     eye.value = !eye.value;
@@ -36,38 +41,32 @@ class LoginController extends GetxController {
     return null;
   }
 
-  // void login() async {
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse('https://reqres.in/api/login'),
-  //       body: {
-  //         'email': email.value.text,
-  //         'password': password.value.text,
-  //       },
-  //     );
-
-  //     var data = jsonDecode(response.body);
-  //     print(data);
-  //     print(response.statusCode);
-
-  //     if (response.statusCode == 200) {
-  //       Get.snackbar("Good job", 'Congratulations');
-  //     } else {
-  //       Get.snackbar('Login failed', 'Beta sahi entry daal');
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar('Exception', e.toString());
-  //   }
-  // }
-  login() async {
+  googleLogin() async {
+    print("googleLogin method Called");
+    GoogleSignIn _googleSignIn = GoogleSignIn();
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: email.value.text, password: password.value.text);
-      print(userCredential);
-      Get.snackbar('succesfull', '"Registered Successfully');
-    } catch (e) {
-      print(e);
+      var reslut = await _googleSignIn.signIn();
+      if (reslut == null) {
+        return;
+      }
+
+      final userData = await reslut.authentication;
+      final credential = GoogleAuthProvider.credential(
+          accessToken: userData.accessToken, idToken: userData.idToken);
+      var finalResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      print("Result $reslut");
+      print(reslut.displayName);
+      print(reslut.email);
+      print(reslut.photoUrl);
+      Get.to(home());
+    } catch (error) {
+      print(error);
     }
+  }
+
+  Future<void> logout() async {
+    await GoogleSignIn().disconnect();
+    FirebaseAuth.instance.signOut();
   }
 }

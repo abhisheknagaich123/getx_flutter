@@ -1,28 +1,25 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:getx_flutter/login%20Api/Signup.dart';
+import 'package:getx_flutter/login%20Api/SignupController.dart';
+import 'package:getx_flutter/login%20Api/login.dart';
 
-import 'login_controller.dart';
-
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class Signup extends StatefulWidget {
+  const Signup({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Signup> createState() => _SignupState();
 }
 
-class _LoginState extends State<Login> {
-  final LoginController _controller = Get.put(LoginController());
+class _SignupState extends State<Signup> {
   final _formKey = GlobalKey<FormState>();
+  final SignupController _controller = Get.put(SignupController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Login by Rest Api'),
+        title: Text('Signup by Rest Api'),
         backgroundColor: Colors.blue,
       ),
       body: Form(
@@ -37,7 +34,7 @@ class _LoginState extends State<Login> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Login',
+                    'Signup',
                     style: TextStyle(
                       fontSize: 50,
                       fontWeight: FontWeight.bold,
@@ -134,6 +131,7 @@ class _LoginState extends State<Login> {
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
                         // Handle your login logic here
+                        _controller.emailAndPassword();
                         print('Login tapped');
                       }
                     },
@@ -145,14 +143,13 @@ class _LoginState extends State<Login> {
                       width: 280,
                       height: 60,
                       child: const Center(
-                        child: Text('Login'),
+                        child: Text('Sign Up'),
                       ),
                     ),
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  TextButton(onPressed: () {}, child: Text('Forgot Password')),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -190,10 +187,9 @@ class _LoginState extends State<Login> {
                     height: 40,
                   ),
                   ElevatedButton(
-                      onPressed: () {
-                        Get.to(() => Signup());
-                      },
-                      child: Text('New User? Create Account')),
+                      onPressed: () {},
+                      child:
+                          Text('You already have an account? Please log in.')),
                 ],
               ),
             ),

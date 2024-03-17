@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,15 +9,24 @@ import 'package:getx_flutter/DialogButton.dart';
 import 'package:getx_flutter/GetxStateChange.dart';
 import 'package:getx_flutter/Snackbar.dart';
 import 'package:getx_flutter/login%20Api/Login_.dart';
+import 'package:getx_flutter/login%20Api/Signup.dart';
 import 'package:getx_flutter/login%20Api/login.dart';
 
 void main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    runApp(GetMaterialApp(
-      home: Login(),
-    ));
+    Platform.isAndroid
+        ? await Firebase.initializeApp(
+            options: FirebaseOptions(
+              apiKey: "AIzaSyAdQ7hpZg3VpU6Cn_2bN70O27o9CEGzUcw",
+              appId: "1:1030517198157:android:e5832f1177afcd507f7b04",
+              messagingSenderId: "1030517198157",
+              projectId: "news-app-f7d61",
+            ),
+          )
+        : await Firebase.initializeApp();
+
+    runApp(GetMaterialApp(home: Signup()));
   } catch (e) {
     print('Error initializing Firebase: $e');
   }
